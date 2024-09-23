@@ -1,51 +1,48 @@
 #include "binary_trees.h"
 
 /**
- * bst_insert - Inserts a value into a Binary Search Tree
- * @tree: Double pointer to the root of the BST
- * @value: Value to insert
+ * bst_insert - Inserts a value in a Binary Search Tree
+ * @tree: A double pointer to the root node of the BST
+ * @value: The value to store in the node to be inserted
  *
- * Return: Pointer to the created node, or NULL on failure
+ * Return: A pointer to the created node, or NULL on failure
  */
-bst_t *bst_insert(bst_t **tree, int value) {
-    bst_t *new_node;
+bst_t *bst_insert(bst_t **tree, int value)
+{
+	bst_t *curr, *new;
 
-    // Create a new node if the tree is empty
-    if (*tree == NULL) {
-        new_node = binary_tree_node(NULL, value);
-        if (new_node == NULL) {
-            return (NULL);  // Memory allocation failed
-        }
-        *tree = new_node;  // Set as the root of the BST
-        return (new_node);
-    }
+	if (tree != NULL)
+	{
+		curr = *tree;
 
-    // Traverse the tree
-    if (value < (*tree)->n) {
-        // Insert into the left subtree
-        if ((*tree)->left == NULL) {
-            new_node = binary_tree_node(*tree, value);  // Create a new node
-            if (new_node) {
-                (*tree)->left = new_node;  // Attach it to the left
-            }
-            return (new_node);
-        } else {
-            return bst_insert(&(*tree)->left, value);  // Recur left
-        }
-    } else if (value > (*tree)->n) {
-        // Insert into the right subtree
-        if ((*tree)->right == NULL) {
-            new_node = binary_tree_node(*tree, value);  // Create a new node
-            if (new_node) {
-                (*tree)->right = new_node;  // Attach it to the right
-            }
-            return (new_node);
-        } else {
-            return bst_insert(&(*tree)->right, value);  // Recur right
-        }
-    }
+		if (curr == NULL)
+		{
+			new = binary_tree_node(curr, value);
+			if (new == NULL)
+				return (NULL);
+			return (*tree = new);
+		}
 
-    // Value already exists in the tree
-    return (NULL);
+		if (value < curr->n) /* insert in left subtree */
+		{
+			if (curr->left != NULL)
+				return (bst_insert(&curr->left, value));
+
+			new = binary_tree_node(curr, value);
+			if (new == NULL)
+				return (NULL);
+			return (curr->left = new);
+		}
+		if (value > curr->n) /* insert in right subtree */
+		{
+			if (curr->right != NULL)
+				return (bst_insert(&curr->right, value));
+
+			new = binary_tree_node(curr, value);
+			if (new == NULL)
+				return (NULL);
+			return (curr->right = new);
+		}
+	}
+	return (NULL);
 }
-
